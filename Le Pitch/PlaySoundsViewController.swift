@@ -13,7 +13,6 @@ class PlaySoundsViewController: UIViewController, AVAudioPlayerDelegate {
     
     var player:AVAudioPlayer = AVAudioPlayer()
     
-
     var movieSound:NSURL = NSURL()
     
     var recievedAudio:RecordedAudio!
@@ -21,7 +20,6 @@ class PlaySoundsViewController: UIViewController, AVAudioPlayerDelegate {
     var audioEngine:AVAudioEngine!
     
     var audioFile:AVAudioFile!
-
     
     @IBAction func playSlowedDown(sender: AnyObject) {
         playerPlay(0.5)
@@ -39,11 +37,19 @@ class PlaySoundsViewController: UIViewController, AVAudioPlayerDelegate {
         playWithPitch(-1000)
     }
     
-    func playWithPitch(pitch:Float){
-        playingStopButton.hidden = false
+    func stopAudios(){
         player.stop()
-        audioEngine.stop()
-        audioEngine.reset()
+        if audioEngine.running{
+            audioEngine.stop()
+            audioEngine.reset()
+        }
+    }
+    
+    func playWithPitch(pitch:Float){
+        
+        playingStopButton.hidden = false
+        
+        stopAudios()
         
         let audioPlayerNode = AVAudioPlayerNode()
         audioEngine.attachNode(audioPlayerNode)
@@ -74,20 +80,14 @@ class PlaySoundsViewController: UIViewController, AVAudioPlayerDelegate {
     @IBOutlet weak var playingStopButton: UIButton!
     
     @IBAction func stopSound(sender: AnyObject) {
-            player.stop()
+            stopAudios()
             playingStopButton.hidden = true
-            if audioEngine.running{
-                audioEngine.stop()
-            }
             player.currentTime = 0.0
     }
     
     func playerPlay(rate:Float){
-        if audioEngine.running{
-            audioEngine.stop()
-        }
+        stopAudios()
         player.delegate = self
-        player.stop()
         player.currentTime = 0.0
         player.rate = rate
         player.prepareToPlay()
@@ -95,13 +95,9 @@ class PlaySoundsViewController: UIViewController, AVAudioPlayerDelegate {
         playingStopButton.hidden = false
     }
     
-
-    
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-
         
         audioEngine = AVAudioEngine()
         audioFile = try! AVAudioFile(forReading: recievedAudio.filePathUrl)
@@ -115,12 +111,5 @@ class PlaySoundsViewController: UIViewController, AVAudioPlayerDelegate {
         }
 
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
 
 }

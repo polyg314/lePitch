@@ -29,13 +29,6 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         recordButton.enabled = false
         
         let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) [0] as String
-    
-//        let currentDateTime = NSDate()
-//        let formatter = NSDateFormatter()
-//        
-//        formatter.dateFormat = "ddMMyyyy-HHmmss"
-//        
-//        let recordingName = formatter.stringFromDate(currentDateTime) + ".wav"
         
         let recordingName = "my_audio.wav"
         
@@ -67,14 +60,14 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         
             recordedAudio = RecordedAudio(filePath: recorder.url, title: recorder.url.lastPathComponent!)
 
-            self.performSegueWithIdentifier("stopRecording", sender: recordedAudio)
+            performSegueWithIdentifier("stopRecording", sender: recordedAudio)
         
         } else{
         
-            print("error")
-            
             recordButton.enabled = true
+            
             stopButton.hidden = true
+            
         
         }
 
@@ -106,19 +99,10 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
     
     override func viewWillAppear(animated: Bool) {
         recordButton.enabled = true
         stopButton.hidden = true
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
 
